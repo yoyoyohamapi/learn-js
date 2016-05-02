@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/ES6/compiled/let-compiled.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/ES6/test-babel-compiled.js" />
+      <root url="file://$PROJECT_DIR$/ES6/compiled/test-babel-compiled.js" />
+      <root url="file://$PROJECT_DIR$/ES6/compiled/let-compiled.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

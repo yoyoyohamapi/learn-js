@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="assert.js"></script>
+</head>
+<style>
+    #results li.pass {
+        color: green;
+    }
+
+    #results li.fail {
+        color: red;
+    }
+</style>
+<body>
+<ul id="results"></ul>
+
+<div>
+    <div>
+            <span>
+                Span
+            </span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.onload = function () {
+        function find(selector, root) {
+
+            root = root || document;
+
+            var parts = selector.split(" "),
+                    query = parts[parts.length-1],
+                    rest = parts.slice(0, -1).join(""),
+                    elems = root.getElementsByTagName(query),
+                    results = [];
+
+            console.log(rest);
+
+            for (var i = 0; i<elems.length;i++) {
+                if(rest) {
+                    var parent = elems[i].parentNode;
+                    while( parent && parent.nodeName != rest) {
+                        parent = parent.parentNode;
+                    }
+
+                    if(parent) {
+                        results.push(elems[i]);
+                    }
+                } else {
+                    results.push(elems[i]);
+                }
+            }
+
+            return results;
+        }
+
+        var divs = find("div");
+        assert(divs.length === 2, "Correct number of divs found.");
+
+        var divs = find("div", document.body);
+        assert(divs.length === 2, "Correct number of divs found in body");
+
+        var divs = find("body div");
+        assert(divs.length === 2, "Correct number of divs found in body.");
+
+        var spans = find("div span");
+        assert(spans.length === 2, "A duplicated span was found.");
+    }
+</script>
+</body>
+
+</html>

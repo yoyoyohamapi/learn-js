@@ -1,0 +1,33 @@
+<!-- 发送器页面 -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sender</title>
+</head>
+<script type="text/javascript">
+    function manageEvent(eventObj, event, eventHandler) {
+        if(eventObj.addEventListener) {
+            eventObj.addEventListener(event, eventHandler, false);
+        } else if (eventObj.attachEvent) {
+            eventObj.attachEvent('on'+event, eventHandler);
+        }
+    }
+
+    window.onload = function() {
+        manageEvent(window, "message", receive);
+    };
+
+    function receive(e) {
+        console.log(e);
+        var img = document.getElementById("image");
+        img.src = e.data.split(",")[0];
+        img.alt = e.data.split(",")[1];
+
+        e.source.postMessage("Received" + e.data, "/");
+    }
+</script>
+
+<body>
+<img src="" id="image" alt="">
+</body>
+</html>

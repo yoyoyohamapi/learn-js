@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>继承的实现</title>
+    <meta charset="utf-8"/>
+    <script>
+        function assert(value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+
+        (function () {
+            // 注意:构造过程中可能是耗时的,由此引入标志位
+            var initializing = false,
+                    superPattern = /xyz/.test(function () {
+                        xyz;
+                    }) ? /\b_super\b/ : /.*/;
+
+            Object.subClass = function (properties) {
+                var _super = this.prototype;
+
+                // 进入构造阶段
+                initializing = true;
+                var proto = new this();
+                initializing = false;
+
+                // 构建子类
+                for (var name in properties) {
+                    // 检查该属性方法父类是否已经具有,如果具有,需保留原始方法
+                    proto[name] = typeof properties[name] === "function" && typeof _super[name] === "function"
+                    && superPattern.test(properties[name]) ?
+                            (function (name, fn) {
+                                // 如果原来子类对象已经具有_super方法,我们应当保留其引用,以节省内存
+                                var tmp = this._super;
+
+                                // 设置_super方法的行为为调用父类同名方法
+                                this._super = _super[name];
+                                var ret = fn.apply(this, arguments);
+                                this._super = tmp;
+                                return ret;
+                            })(name, properties[name]) : properties[name];
+                }
+
+                // 类的构造器
+                function Class() {
+                    if (!initializing && this.init) {
+                        this.init.apply(this, arguments);
+                    }
+                }
+
+                // 子类的原型为自身
+                Class.prototype = proto;
+
+                // 重载构造器
+                Class.constructor = Class;
+
+                // 子类自身的subClass, 让子类继续可扩展
+                Class.subClass = arguments.callee;
+
+                // 返回的是构造函数
+                return Class;
+            }
+        })();
+
+
+        window.onload = function () {
+            var Person = Object.subClass({
+                init: function (isDancing) {
+                    this.dancing = isDancing;
+                },
+                dance: function () {
+                    return this.dancing;
+                }
+            });
+
+            var Ninja = Person.subClass({
+                init: function () {
+                    this._super(false);
+                },
+                swingSword: function () {
+                    return true;
+                }
+            });
+
+            var person = new Person(true);
+
+            assert(person.dance(), "The person is dancing.");
+
+            var ninja = new Ninja();
+
+            assert(!ninja.dance(), "The ninja is not dancing.");
+
+            assert(person instanceof Person, "Person is a Person");
+
+            assert(ninja instanceof Ninja && ninja instanceof Person, "Ninja is a Ninja and a Person.");
+        }
+    </script>
+
+    <style>
+        #results li.pass {
+            color: green;
+        }
+
+        #results li.fail {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<ul id="results"></ul>
+</body>
+</html>

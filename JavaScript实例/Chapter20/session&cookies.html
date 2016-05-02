@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comparing Cookies and sessionStorage</title>
+    <script type="text/javascript">
+        window.onload = function() {
+            document.getElementById("set").onclick = setData;
+            document.getElementById("get").onclick = getData;
+            document.getElementById("erase").onclick = removeData;
+        };
+
+        function setData() {
+            var key = document.getElementById("key").value;
+            var value = document.getElementById("value").value;
+
+            // 设置session
+            var current = sessionStorage.getItem(key);
+
+            if(current) {
+                current += value;
+            } else {
+                current = value;
+            }
+
+            sessionStorage.setItem(key,current);
+
+            // 设置Cookie
+            current = getCookie(key);
+            if (current) {
+                current += value;
+            } else {
+                current = value;
+            }
+            setCookie(key,current);
+        }
+
+        function getData() {
+            try {
+                var key = document.getElementById("key").value;
+                var value = sessionStorage.getItem(key);
+                if(!value) value="";
+                document.getElementById("sessionStr").innerHTML="<p>" + value + "</p>";
+                value = getCookie(key);
+                if(!value) value = "";
+                document.getElementById("cookieStr").innerHTML="<p>" + value + "</p>";
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
+        function removeData() {
+            var key = document.getElementById("key").value;
+
+            sessionStorage.removeItem(key);
+
+            eraseCookie(key);
+        }
+
+        function setCookie(key,value) {
+            var tmp = key + "=" + encodeURI(value) + ";path=/";
+            document.cookie=tmp;
+        }
+
+        function getCookie(key) {
+            var cookie = document.cookie;
+            // 截取value
+            var first = cookie.indexOf(key+"=");
+            if(first>=0) {
+                var str = cookie.substring(first, cookie.length);
+                var last = str.indexOf(";");
+
+                if(last<0){
+                    last = str.length;
+                }
+
+                str = str.substring(0, last).split("=");
+                return decodeURI(str[1]);
+            } else {
+                return null;
+            }
+        }
+
+        // 设置cookie过期,即为擦除
+        function eraseCookie(key) {
+            var cookieDate = new Date();
+            cookieDate.setDate(cookieDate.getDate() - 10);
+            var tmp = key + "= ;expires="+cookieDate.toGMTString+";path=/";
+            document.cookie=tmp;
+        }
+    </script>
+</head>
+
+<body>
+<form>
+    <label for="key">Enter key</label>
+    <input type="text" id="key"/> <br/> <br/>
+    <label for="value">Enter value</label>
+    <input type="text" id="value"/> <br/> <br/>
+</form>
+
+<button id="set">Set data</button>
+<button id="get">Get data</button>
+<button id="erase">Erase data</button>
+
+<div id="sessionStr"><p></p></div>
+<div id="cookieStr"><p></p></div>
+</body>
+</html>

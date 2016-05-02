@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>事件处理</title>
+    <script type="text/javascript" src="myevent.js"></script>
+</head>
+<body>
+<div id="testSubject1" title="Click once">么么哒</div>
+<div id="testSubject2" title="mouse over">啾啾</div>
+<div id="testSubject3" title="many times">嘻嘻</div>
+<!--冒烟测试-->
+<script type="text/javascript">
+    // 绑定事件时,实际是将事件绑定到了window的dispatcher上
+    MyEvent.addEvent(window, "load", function () {
+        // 收集测试对象
+        var subjects = document.getElementsByTagName("div");
+
+        // 注意使用闭包来获得正确绑定
+        for (var i = 0; i < subjects.length; i++)
+            (function (elem) {
+                MyEvent.addEvent(elem, "mouseover", function handler(e) {
+                    this.style.backgroundColor = "red";
+                });
+
+                MyEvent.addEvent(elem, "click", function handler(e) {
+                    this.style.backgroundColor = "green";
+                    MyEvent.removeEvent(elem, "click", handler);
+                });
+            })(subjects[i]);
+
+        <!--for (var i=0;i<subjects.length;i++) {-->
+        <!--var elem = subjects[i];-->
+        <!--addEvent(elem, "mouseover", function handler(e) {-->
+        <!--this.style.backgroundColor = "red";-->
+        <!--});-->
+
+        <!--addEvent(elem, "click", function handler(e){-->
+        <!--this.style.backgroundColor = "green";-->
+        <!--removeEvent(elem, "click", handler);-->
+        <!--});-->
+        <!--}-->
+    });
+</script>
+</body>
+</html>

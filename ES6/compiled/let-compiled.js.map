@@ -1,0 +1,1 @@
+{"version":3,"sources":["let.js"],"names":[],"mappings":"AAAA;AACI,QAAI,IAAI,CAAJ,CADR;;;AAIA,QAAQ,GAAR,CAAY,CAAZ","file":"let-compiled.js","sourcesContent":["{\n    let a = 2;\n}\n\nconsole.log(a);"]}

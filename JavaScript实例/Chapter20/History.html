@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Remember me--new,and improved</title>
+</head>
+<script type="text/javascript">
+    window.onload = function () {
+        document.getElementById("next").onclick = nextPanel;
+    };
+
+    // 当点击回退按钮时响应
+    window.onpopstate = function (event) {
+        console.log(event);
+        if (!event.state) return;
+        var page = event.state.page;
+        switch (page) {
+            case "one":
+                functionOne();
+                break;
+            case "two":
+                functionOne();
+                functionTwo();
+                break;
+            case "three":
+                functionOne();
+                functionTwo();
+                functionThree()
+        }
+    };
+
+    function nextPanel() {
+        var page = document.getElementById("next").getAttribute("data-page");
+        switch (page) {
+            case "zero":
+                functionOne();
+                break;
+            case "one":
+                functionTwo();
+                break;
+            case "two":
+                functionThree();
+                break;
+        }
+    }
+
+    function setPage(page) {
+        document.getElementById("next").setAttribute("data-page", page);
+        // 设置当前窗口状态
+        // @状态对象：记录历史记录点的额外对象，可以为空
+        // @页面标题：目前所有浏览器都不支持
+        // @可选的url：浏览器不会检查url是否存在，只改变url，url必须同域，不能跨域
+        window.history.pushState({page: page}, "Page " + page, "?page=" + page);
+    }
+
+    function functionOne() {
+        var square = document.getElementById("square");
+        square.style.postion = "relative";
+        square.style.left = "0";
+        square.style.backgroundColor = "#ff0000";
+        square.style.width = "200px";
+        square.style.height = "200px";
+        square.style.padding = "10px";
+        square.style.margin = "20px";
+        setPage("one");
+    }
+
+    function functionTwo() {
+        var square = document.getElementById("square");
+        square.left = "200px";
+        square.postion = "absolute";
+        square.style.backgroundColor = "#ffff00";
+        setPage("two");
+    }
+
+    function functionThree() {
+        var square = document.getElementById("square");
+        square.left = "400px";
+        square.style.backgroundColor = "#00ff00";
+        square.style.width = "400px";
+        square.style.height = "400px";
+        setPage("three");
+    }
+
+</script>
+<body>
+<button id="next" data-page="zero">Next Action</button>
+<div id="square" class="zero">
+    <p>This is the object</p>
+</div>
+</body>
+</html>

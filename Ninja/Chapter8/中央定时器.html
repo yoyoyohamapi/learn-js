@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>中央定时器</title>
+</head>
+<body>
+<div id="box" style="position: absolute">Hello!</div>
+<script type="text/javascript">
+    var timers = {
+        // 标识定时任务状态,任何非0值都反映当前正存在一个有效定时器
+        timerID: 0,
+        timers: [],
+
+        add: function (fn) {
+            // 将定时任务添加到队列
+            this.timers.push(fn);
+        },
+
+        start: function () {
+            // 避免重复开始
+            if (this.timerID) return;
+            console.log(1);
+            (function runNext() {
+                // 逐个执行函数
+                if (timers.timers.length > 0) {
+                    for (var i = 0; i < timers.timers.length; i++) {
+                        // 如果函数执行失败,从队列中删除
+                        if (timers.timers[i]() === false) {
+                            timers.timers.splice(i, 1);
+                        }
+                    }
+                    timers.timerID = setTimeout(runNext, 0);
+                }
+            })();
+        },
+
+        stop: function () {
+            clearTimeout(this.timerID);
+            this.timerID = 0;
+        }
+    };
+
+    window.onload = function () {
+        var box = document.getElementById("box"), x = 0, y = 20;
+
+        timers.add(function () {
+            box.style.left = x + "px";
+            if (++x > 50) return false;
+        });
+
+        timers.add(function () {
+            box.style.top = y + "px";
+            y = y + 2;
+            if (y > 240) return false;
+        });
+
+        timers.start();
+    }
+
+
+</script>
+</body>
+</html>

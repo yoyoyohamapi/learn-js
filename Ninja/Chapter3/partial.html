@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test suite</title>
+  <meta charset="utf-8"></meta>
+  <script>
+    function assert(value, desc) {
+      var li = document.createElement("li");
+      li.className = value? 'pass': 'fail';
+      li.appendChild(document.createTextNode(desc));
+      document.getElementById("results").appendChild(li);
+    };
+    Function.prototype.partial = function() {
+      var fn = this, args = Array.prototype.slice.call(arguments);
+      // 通过闭包暂存了args
+      return function() {
+        // 参数下标
+      console.log(arguments);
+        var arg = 0;
+        for (var i=0; i<args.length && arg<arguments.length; i++ ){
+          if(args[i] === undefined) {
+            args[i] = arguments[arg++];
+          }
+        }
+        console.log(args);
+        return fn.apply(this, args);
+      }
+    };
+
+    window.onload = function() {
+      var delay = setTimeout.partial(undefined, 10);
+      console.log(delay);
+      delay(function(){
+        assert(true, "A call to this functin will be delayed 10 ms.");
+      })
+    }
+  </script>
+
+  <style>
+    #results li.pass { color: green; }
+    #results li.fail { color: red; text-decoration: line-through;}
+  </style>
+</head>
+<body>
+  <ul id="results"></ul>
+</body>
+</html>

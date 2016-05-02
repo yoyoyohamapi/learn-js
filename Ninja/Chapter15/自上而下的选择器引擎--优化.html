@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="assert.js"></script>
+</head>
+<style>
+    #results li.pass {
+        color: green;
+    }
+
+    #results li.fail {
+        color: red;
+    }
+</style>
+<body>
+<ul id="results"></ul>
+
+<div>
+    <div>
+            <span>
+                Span
+            </span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.onload = function () {
+        (function () {
+            var run = 0;
+
+            this.unique = function (array) {
+                var ret = [];
+
+                // 用run方法来进行标记
+                run++;
+
+                for (var i = 0, length = array.length; i < length; i++) {
+                    var elem = array[i];
+
+                    if (elem.uniqueID !== run) {
+                        elem.uniqueID = run;
+                        ret.push(array[i]);
+                    }
+                }
+                return ret;
+            }
+        })();
+
+        var divs = unique(document.getElementsByTagName("div"));
+        assert(divs.length === 2, "No duplicates removed");
+
+        var body = unique([document.body, document.body]);
+        assert(body.length === 1, "body duplicate removed");
+    }
+</script>
+</body>
+
+</html>

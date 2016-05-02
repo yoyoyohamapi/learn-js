@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>延迟加载</title>
+</head>
+<body>
+<script type="text/javascript" src="loadScript.js"></script>
+<script type="text/javascript" >
+$.loadScript('file1.js', function() {
+    $.loadScript('file2.js',function(){
+        $.xhrLoadScript('file3.js');
+    });
+})
+</script>
+</body>
+</html>

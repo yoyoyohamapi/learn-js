@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Javascript Function() Context</title>
+    <script type="text/javascript">
+        // Define this variable in the Window scope.
+        var scope = "window";
+        // Run a self-contained function.
+        (function(){
+            // Create a locally scoped variable.
+            var scope = "function";
+            // Define a function that logs the current scope value.
+            // If this creates a closure, it will log, "function."
+            // If it does not, it will log, "window."
+            var testScope = new Function(
+                    "console.log( scope );"
+            );
+            // Execute the test function.
+            testScope();
+        })();
+    </script>
+</head>
+<body>
+<!-- Left blank intentionally. -->
+</body>
+</html>

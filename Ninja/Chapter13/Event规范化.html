@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Event规范化</title>
+</head>
+<body>
+<script type="text/javascript">
+
+    function fixEvent(event) {
+        function returnTrue() {
+            return true
+        }
+
+        function returnFalse() {
+            return false
+        }
+
+        // 判断是否需要修复(IE Model下的event是不具备stopPropagation属性的)
+        if (!event || !event.stopPropagation) {
+            var old = event || window.event;
+
+            event = {};
+
+            // 克隆现有的属性
+            for (var prop in old) {
+                event[prop] = old[prop];
+            }
+
+            // ----------- 逐个属性修复
+            if (!event.target) {
+                event.target = event.srcElement || document;
+            }
+
+            // 对于 mouseover 和 mouseout 事件，该属性引用移入鼠标的元素。
+            event.relatedTarget = event.fromElement === event.target ?
+                    event.toElement : event.fromElement;
+
+            // 防止浏览器默认行为
+            event.preventDefault = function () {
+                event.returnValue = false;
+                event.isDefaultPrevented = returnTrue();
+            };
+
+            // 默认不阻止浏览器默认xingwei
+            event.isDefaultPrevented = returnFalse;
+
+            // 防止事件冒泡
+            event.stopPropagation = function () {
+                event.cancelBubble = true;
+                event.isPropagationStopped = returnTrue();
+            };
+
+            // 默认不阻止事件冒泡
+            event.stopImmediatePropagation = function () {
+                this.isImmediatePropagationStopped = returnTrue();
+                this.stopImmediatePropagation();
+            };
+
+            event.stopImmediatePropagation = returnFalse();
+
+            // 修正事件的鼠标位置
+            if (event.clientX != null) {
+                var doc = document.documentElement, body = document.body;
+
+                event.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+                        (doc && doc.clientLeft || body && body.clientLeft || 0);
+
+                event.pageY = event.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) -
+                        (doc && doc.clientTop || body && body.clientTop || 0);
+            }
+
+            // 修正键盘按键
+            event.which = event.charCode || event.keyCode;
+
+            // 修正鼠标点击
+            if (event.button != null) {
+                event.button = (event.button & 1 ? 0 : (event.button & 4 ? 1 : (event.button & 2 ? 2 : 0)));
+            }
+
+        }
+        return event;
+
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test suite</title>
+  <script>
+    function assert(value, desc) {
+      var li = document.createElement("li");
+      li.className = value? 'pass': 'fail';
+      li.appendChild(document.createTextNode(desc));
+      document.getElementById("results").appendChild(li);
+    };
+    function add(a, b, c) {
+      return a+b+c;
+    };
+    Function.prototype.curry2 = function() {
+      var fn = this, args = Array.prototype.slice.call(arguments);
+      // 通过闭包暂存了args
+      return function() {
+        console.log(arguments);
+        return fn.apply(this, args.concat(Array.prototype.slice.call(arguments)));
+      }
+    };
+
+    window.onload = function() {
+        /**
+          add1 = function() {return fn.apply(this, args.concat(Array.prototype.slice.call(arguments)));}
+          其中，args通过闭包暂存了    
+        */
+        var add1 = add.curry2(1,2);
+        console.log(add1(6));
+    }
+  </script>
+
+  <style>
+    #results li.pass { color: green; }
+    #results li.fail { color: red; text-decoration: line-through;}
+  </style>
+</head>
+<body>
+  <ul id="results"></ul>
+</body>
+</html>

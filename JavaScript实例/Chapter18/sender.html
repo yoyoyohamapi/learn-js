@@ -1,0 +1,42 @@
+<!-- 发送器页面 -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sender</title>
+</head>
+<script type="text/javascript">
+    function manageEvent(eventObj, event, eventHandler) {
+        if(eventObj.addEventListener) {
+            eventObj.addEventListener(event, eventHandler, false);
+        } else if (eventObj.attachEvent) {
+            eventObj.attachEvent('on'+event, eventHandler);
+        }
+    }
+
+    window.onload = function() {
+        manageEvent(document.getElementById('button1'), "click", sendMessage);
+        manageEvent(window, "message", receive);
+    };
+
+    function sendMessage() {
+        var farAwayWindow = document.getElementById("widgetId").contentWindow;
+        try {
+            // postMessage的第二个参数指定了消息的接收窗口的源
+            farAwayWindow.postMessage("dragonfly6.thumbnail.jpg, Dragonfly on flower", '/');
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    function receive(e) {
+        console.log(e);
+        if(e.origin == "http://jscb.burningbird.net")
+            console.log(e.data);
+    }
+</script>
+
+<body>
+    <div><button id="button1">Load the photo</button> </div>
+    <iframe src="listener.html" id="widgetId"></iframe>
+</body>
+</html>

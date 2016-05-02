@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="assert.js" type="text/javascript"></script>
+</head>
+<style>
+    #results li.pass {
+        color: green;
+    }
+
+    #results li.fail {
+        color: red;
+    }
+</style>
+<body>
+<ul id="results"></ul>
+
+<div id="test">
+    <b>Hello</b>, I'm a ninja!
+</div>
+<div id="test2"></div>
+
+<script type="text/javascript">
+    (function() {
+
+        var count = 1;
+
+        this.rootedQuerySelectorAll = function (elem, query) {
+            var oldID = elem.id;
+            elem.id = "rooted" + (count++);
+
+            try {
+                return elem.querySelectorAll("#" + elem.id + " " + query);
+            } catch  (e) {
+                throw e;
+            } finally {
+                elem.id = oldID;
+            }
+        }
+    })();
+    window.onload = function() {
+        var divs = document.querySelectorAll("body > div");
+        assert(divs.length === 2, "Two divs found using a CSS selector.");
+
+        var b = document.getElementById("test").querySelector("b:only-child");
+
+        assert(b, "The bold element was found relative to another element.");
+
+        var b1 = document.getElementById("test").querySelector("div b");
+        assert(b1, "Only the last part of the selector matters");
+
+        var b2 = rootedQuerySelectorAll(document.getElementById("test"), "b");
+        assert(b2.length === 0, "The selector is now rooted properly.");
+    }
+</script>
+</body>
+</html>

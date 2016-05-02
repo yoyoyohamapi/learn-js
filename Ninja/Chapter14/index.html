@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="Dommer.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            console.log(Dommer.convert("<a href='www.baidu.com'/>"));
+            var fragment = document.createDocumentFragment();
+            console.log(Dommer.getNodes("<td>test</td><td>test2</td>", document, fragment));
+        </script>
+    </body>
+</html>

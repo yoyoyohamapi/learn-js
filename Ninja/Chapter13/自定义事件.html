@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="myevent.js"></script>
+</head>
+<style type="text/css">
+    #whirlyThing {
+        display: none;
+    }
+</style>
+<body>
+<div >
+    <button type="button" id="clickMe">Start</button>
+    <p id="whirlyThing">假设这是一个轮播</p>
+</div>
+<script type="text/javascript">
+
+    function performAjaxOperation(target) {
+        MyEvent.triggerEvent(target, 'ajax-start');
+
+        window.setTimeout(function(){
+            MyEvent.triggerEvent(target, 'ajax-complete');
+        });
+    }
+    MyEvent.addEvent(window, 'load', function () {
+        var button = document.getElementById("clickMe");
+        MyEvent.addEvent(button, 'click', function(){
+            performAjaxOperation(this);
+        });
+
+        var body = document.getElementsByTagName('body')[0];
+
+        MyEvent.addEvent(body, 'ajax-start', function(e){
+            document.getElementById('whirlyThing').style.display = 'inline-block';
+        });
+
+        MyEvent.addEvent(body, 'ajax-complete', function(e){
+            document.getElementById('whirlyThing').style.display = 'none';
+        });
+    });
+</script>
+</body>
+</html>

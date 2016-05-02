@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>动态生成函数</title>
+</head>
+<script type="text/javascript">
+    function foo(x) {
+        var tmp = 3;
+        return function (y) {
+            alert(x + y + (++tmp));
+        }
+    }
+    var bar = foo(2); // bar 现在是一个闭包
+    bar(10); // 16
+    bar(10); // 17
+    /*
+        原因:
+        bar = function(y) {
+            alert(x+y+(++tmp));
+        }
+        bar 现在形成了一个闭包, x快照为2,
+        第一次执行时, tmp变为4,且在bar内,tmp已经被快照,此时更新快照tmp
+        第二次执行,获得新的tmp5
+     */
+
+</script>
+</html>

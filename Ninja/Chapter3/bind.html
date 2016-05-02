@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test suite</title>
+  <script>
+    function assert(value, desc) {
+      var li = document.createElement("li");
+      li.className = value? 'pass': 'fail';
+      li.appendChild(document.createTextNode(desc));
+      document.getElementById("results").appendChild(li);
+    };
+    Function.prototype.bind2 = function() {
+      console.log(arguments);
+      var fn = this, args = Array.prototype.slice.call(arguments),
+          object = args.shift();
+      console.log(args);
+
+      return function() {
+        return fn.apply(object, args.concat(Array.prototype.slice.call(arguments)));
+      }
+    };
+
+    window.onload = function() {
+      var myObject = {};
+      function myFunction() {
+        return this == myObject;
+      }
+      assert(!myFunction(), "Context is not set yet");
+      var aFunction = myFunction.bind2(myObject);
+      assert(aFunction(), "Context is set properly");
+    }
+  </script>
+
+  <style>
+    #results li.pass { color: green; }
+    #results li.fail { color: red; text-decoration: line-through;}
+  </style>
+</head>
+<body>
+  <ul id="results"></ul>
+</body>
+</html>

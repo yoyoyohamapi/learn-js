@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>闭包经典例子</title>
+</head>
+<body>
+    <button type="button">按钮0</button>
+    <button type="button">按钮1</button>
+    <button type="button">按钮2</button>
+    <button type="button">按钮3</button>
+    <button type="button">按钮4</button>
+
+    <script type="text/javascript">
+        window.onload = function load() {
+            var buttons = document.getElementsByTagName('button');
+            for(var i= 0,length = buttons.length;i<length;i++) {
+                buttons[i].onclick = function() {
+                    alert(i);
+                };
+
+//                buttons[i].onclick = (function exec() {
+//                    var j = i;
+//                    return function click() {
+//                        alert(j);
+//                    }
+//                })();
+
+//                buttons[i].onclick = (function exec() {
+//                   return function click() {
+//                       alert(i);
+//                   }
+//                })();
+
+                buttons[i].onclick = function() {
+                    var j = i;
+                    alert(j);
+                };
+            }
+        }
+    </script>
+</body>
+</html>
