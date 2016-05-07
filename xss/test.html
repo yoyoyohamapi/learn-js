@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>XSS测试</title>
+</head>
+<body>
+    <script type="text/javascript">
+        window.onload = function(){
+        var script = document.createElement('script');
+            script.setAttribute('type', 'text/javascript');
+            script.setAttribute('src', 'test.js');
+            script.setAttribute('async', true);
+        script.onload = script.onreadystatechange = function(){
+            console.log('onload');
+        }
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
+    </script>
+</body>
+</html>

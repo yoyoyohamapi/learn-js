@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>弹出框测试</title>
+    <script type="text/javascript" src="../dist/bundle.js"></script>
+</head>
+
+<body>
+<style>
+    .main {
+        margin: 100px auto;
+        text-align: center;
+    }
+
+    .button {
+        background-color: #049cdb;
+        color: white;
+        border: none;
+    }
+
+    .button.large {
+        font-size: 24px;
+        padding: 10px;
+    }
+
+    .button.medium {
+        padding: 5px;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+
+    .modal {
+        position: relative;
+        background-color: #0d3349;
+        color: white;
+        box-shadow: 0px 0px 30px black;
+
+        webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: fadein 1s; /* Firefox < 16 */
+        -ms-animation: fadein 1s; /* Internet Explorer */
+        -o-animation: fadein 1s; /* Opera < 12.1 */
+        animation: fadein 1s;
+    }
+
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Firefox < 16 */
+    @-moz-keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Safari, Chrome and Opera > 12.1 */
+    @-webkit-keyframes fadein {
+        from { opacity: 0;}
+        to   { opacity: 1;}
+    }
+
+    /* Internet Explorer */
+    @-ms-keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Opera < 12.1 */
+    @-o-keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    .modal .header {
+        position: relative;
+        width: 100%;
+        padding: 10px 0px;
+        text-align: center;
+
+    }
+
+    .modal .content {
+        padding: 20px;
+    }
+
+    .modal .footer {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        padding: 10px 0;
+        text-align: center;
+        background-color: #235B7B;
+    }
+
+</style>
+<div class="main">
+    <button id="show" type="button" class="button large">显示模态框</button>
+</div>
+<!-- 模态框1  -->
+<div id="modal" class="modal" style="width: 300px;height:500px;">
+    <div id="dragRegion" class="header"
+         style="background-color: salmon;cursor: move;">
+        <h1>模态框1</h1>
+    </div>
+
+    <div class="content">
+        Content
+    </div>
+
+    <div class="footer">
+        <button id="close" type="button" class="button medium">关闭</button>
+        <button id="toLeft" type="button" class="button medium">居左</button>
+        <button id="center" type="button" class="button medium">居中</button>
+        <button id="toRight" type="button" class="button medium">居右</button>
+        <button id="openModal" type="button" class="button medium">打开模态框2</button>
+    </div>
+
+</div>
+<!-- 模态框2 -->
+<div id="modal2" class="modal" style="width: 200px;height:300px;cursor: move">
+    <div class="header"
+         style="background-color: salmon;cursor: move;">
+        <h3>模态框2</h3>
+    </div>
+
+    <div class="content">
+        Content
+    </div>
+
+    <div class="footer">
+        <button id="close2" type="button" class="button medium">关闭</button>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    // ------初始化模态框1--------
+    $("#modal").modal({
+        // 设置拖拽区域
+        dragRegion: $('#dragRegion'),
+
+        // 是否允许多模态框
+        // 允许: 第二个模态框在第一个之上弹出
+        // 不允许: 首先关闭第一个模态框,再弹出接下来的模态框
+        multiple: true,
+
+        onShow: function () {
+            console.log('showing...');
+        },
+        onShowed: function () {
+            console.log('showed');
+        },
+        onHide: function () {
+            console.log('hidding...');
+        },
+        onHidden: function () {
+            console.log('hidden');
+        },
+        onStart: function () {
+            console.log('start drag');
+        },
+        onDrop: function () {
+            console.log('drop drag')
+        },
+        onMove: function () {
+            console.log('moving');
+        }
+    });
+
+    // ---------初始化模态框2----------
+    $("#modal2").modal({
+        dragRegion: $("#modal2"),
+    });
+
+    $("#show").click(function () {
+        $("#modal").modal('show');
+    });
+
+    $("#close").click(function () {
+        $("#modal").modal('hide');
+    });
+
+    $("#center").click(function () {
+        $("#modal").modal('center');
+    });
+
+    $("#toLeft").click(function () {
+        $("#modal").modal('toLeft');
+    });
+
+    $("#toRight").click(function () {
+        $("#modal").modal('toRight');
+    });
+
+    $("#openModal").click(function () {
+        $("#modal2").modal("show");
+    });
+
+    $("#close2").click(function () {
+        $("#modal2").modal('hide');
+    });
+
+</script>
+</body>
+
+</html>
