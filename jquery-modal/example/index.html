@@ -145,24 +145,37 @@
         // 不允许: 首先关闭第一个模态框,再弹出接下来的模态框
         multiple: true,
 
+        // 显示模态时候的回调
         onShow: function () {
             console.log('showing...');
         },
+
+        // 显示完成后的回调
         onShowed: function () {
             console.log('showed');
         },
+
+        // 隐藏模态框的回调
         onHide: function () {
             console.log('hidding...');
         },
+
+        // 隐藏完毕的回调
         onHidden: function () {
             console.log('hidden');
         },
+
+        // 开始拖拽的回调
         onStart: function () {
             console.log('start drag');
         },
+
+        // 结束拖拽的回调
         onDrop: function () {
             console.log('drop drag')
         },
+
+        // 拖拽时候的回调
         onMove: function () {
             console.log('moving');
         }

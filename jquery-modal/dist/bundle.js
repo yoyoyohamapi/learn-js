@@ -10205,7 +10205,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {var $ = __webpack_require__(4);
-	var utils = __webpack_require__(6);
+	var isFunction = __webpack_require__(6).isFunction;
+
+	var BASE_OPTIONS = {
+	    onChange: null
+	};
 
 	function _getTop() {
 	    // 获得自身高度
@@ -10221,9 +10225,10 @@
 	    /**
 	     * 初始化需要保证该DOM的位置为绝对位置
 	     */
-	    init: function () {
+	    init: function (options) {
 	        return $(this).each(function (index, elem) {
 	            elem.aligner = {};
+	            elem.aligner._opts = $.extend({}, BASE_OPTIONS, options);
 	            var position = $(elem).css('postion');
 	            if (position !== 'absolute' || position !== 'fixed')
 	                $(elem).css('position', 'absolute');
@@ -10254,6 +10259,8 @@
 	                'right': '',
 	                'bottom': ''
 	            });
+
+	            isFunction(elem.aligner._opts.onChange) && elem.aligner._opts.onChange();
 	        });
 	    },
 
@@ -10271,6 +10278,7 @@
 	                'top': top,
 	                'bottom': ''
 	            });
+	            isFunction(elem.aligner._opts.onChange) && elem.aligner._opts.onChange();
 	        });
 	    },
 
@@ -10289,6 +10297,7 @@
 	                'right': 0,
 	                'bottom': ''
 	            });
+	            isFunction(elem.aligner._opts.onChange) && elem.aligner._opts.onChange();
 	        });
 	    }
 
@@ -10298,8 +10307,8 @@
 	$.fn.aligner = function (method) {
 	    if (methods[method]) {
 	        return methods[method].apply(this, Array.prototype.slice.call(arguments, 0));
-	    } else if (!method) {
-	        return methods.init.apply(this);
+	    } else if (!method || typeof method === 'object') {
+	        return methods.init.call(this, method);
 	    } else {
 	        $.error("wrong method!");
 	    }
